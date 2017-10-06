@@ -1,0 +1,147 @@
+variables: variables.yml
+templates:
+  torrent_server:
+    transmission:
+      host: localhost
+      port: 9091
+      path: /media/TOSHIBA EXT/flexget/series/
+
+  sigo-series:
+    series:
+      actuales-HD:
+        - Outlander
+        - Poldark
+        - Westworld
+        - Borgoña
+        - Velvet Coleccion
+        - El Ministerio Del Tiempo
+        - Star Trek Discovery
+        - The Walking Dead
+
+  tv_old:
+    series:
+      settings:
+        tv_search:
+          quality: 1080p 720p
+      tv_search:
+        - Better Call Saul:
+            ep_regexp:
+              - Cap.(\d+)(\d\d)
+            identified_by: ep
+        - Breaking Bad:
+            begin: S03E01
+tasks:
+  mis_series:
+    rss:
+      url: http://feeds2.feedburner.com/newpctorrent/
+    template:
+      - torrent_server
+      - sigo-series
+    series:
+      settings:
+        actuales-HD:
+          ep_regexp:
+            - Cap.(\d+)(\d\d)
+          quality: 1080p 720p
+          identified_by: ep
+          path: /media/TOSHIBA EXT/flexget/series/
+    thetvdb_lookup: yes
+
+  search_series:
+    template: [tv_old]
+    discover:
+      what:
+        - next_series_episodes:
+            from_start: yes
+      from:
+        - newpct: yes
+
+  watchlist:
+    priority: 1
+    interval: 2 hours
+    imdb_watchlist:
+      user_id: '{? imdb.user_id ?}'
+      list: watchlist
+      force_language: es-es
+    accept_all: yes
+    seen: local
+    list_add:
+      - movie_list: wanted_movies
+
+  busca_pelis:
+    priority: 10
+    discover:
+      what:
+        - movie_list: wanted_movies
+      from:
+        - newpct: yes
+    imdb_lookup: yes
+#   tmdb_lookup: yes
+#   trakt_lookup: yes
+    torrent_alive: 10
+    quality:
+      - 1080p
+    set:
+      path: /media/TOSHIBA EXT/flexget/pelis
+    list_match:
+      from:
+        - movie_list: wanted_movies
+    regexp:
+      reject:
+        - 'sub[s][\s\._]'
+        - '[Ll]atino'
+        - '[Ss]creener'
+        - '[Ss]creener':
+            from: url
+        - Screeener
+        - Screeener:
+            from: url
+        - 3D
+      from: title
+
+  clean-transmission:
+    priority: 10
+    clean_transmission:
+      host: localhost
+      port: 9091
+#     finished_for: 2 hours
+#     min_ratio: 0.1
+      directories:
+        - \A/+media/+TOSHIBA EXT/+flexget/+series(\Z|/+.*)
+
+  sort-series:
+    priority: 20
+    filesystem:
+      path: /media/TOSHIBA EXT/flexget/series/
+      regexp: '.*\.(avi|mkv|mp4)$'
+      recursive: 2
+      retrieve: files
+    manipulate:
+      - title:
+          from: location
+      - title:
+          replace:
+            regexp: '(.*)/(.*)/(.*)'
+            format: '\2'
+    seen: local
+    metainfo_series: yes
+    thetvdb_lookup: yes
+    # NOTE: You must set the parse_only option for all of the series groups you have configured in your template.
+    # This option prevents the series plugin from accepting or rejecting anything in this feed.
+    # it will merely fill in parsed metadata for the matching series on each entry 
+    template: sigo-series
+    series:
+      settings:
+        actuales-HD:
+          parse_only: yes
+          identified_by: ep
+    # Ignore samples
+    regexp:
+      reject: 
+        - sample
+    # With the require_field and accept_all plugins, we accept anything that the series plugin has successfully parsed.
+    require_field: series_name
+    accept_all: yes
+    move:
+      to: /media/TOSHIBA EXT/Series/{{series_name}}
+      rename: '{{ series_name }} {{ series_id }}'
