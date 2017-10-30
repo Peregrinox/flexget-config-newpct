@@ -6,6 +6,14 @@ templates:
       port: 9091
       path: /media/TOSHIBA EXT/flexget/series/
 
+##### Disable builtins for some tasks
+#
+  disable-seen-retry:
+    disable:
+      - seen
+      - seen_info_hash
+      - retry_failed
+
   sigo-series:
     series:
       actuales-HD:
@@ -17,6 +25,30 @@ templates:
         - El Ministerio Del Tiempo
         - Star Trek Discovery
         - The Walking Dead
+
+  anchors:
+    _trakt_list_1: &trakt_list_1
+      trakt_list:
+        username: '{? trakt.user1 ?}'
+        #account:
+        list: watchlist
+        type: shows
+    _trakt_list_2: &trakt_list_2
+      trakt_list:
+        username: '{? trakt.user2 ?}'
+        list: watchlist
+        type: shows
+    _thetvdb_list_2: &thetvdb_list_2
+      thetvdb_list:
+        username: '{? thetvdb.username2 ?}'
+        account_id: '{? thetvdb.accountid2 ?}'
+    _settings_newpct: &settings_newpct
+      settings:
+        ep_regexp:
+          - Cap.(\d+)(\d\d)
+        quality: 1080p 720p
+        identified_by: ep
+        path: /media/TOSHIBA EXT/flexget/series/
 
   tv_old:
     series:
@@ -31,12 +63,73 @@ templates:
         - Breaking Bad:
             begin: S03E01
 tasks:
+
+  fill-series-list:
+#    priority: 2
+    template:
+      - disable-seen-retry
+#    metainfo_series: yes
+    thetvdb_lookup:
+      language: es
+    list_clear:
+      what:
+        - entry_list: trakt-series
+    inputs:
+      - <<: *trakt_list_2
+      - <<: *trakt_list_1
+    accept_all: yes
+    set:
+#      title: "{{ tvdb_series_name }}"
+#      title: "{{tvdb_series_name|escape|replace('&#39;', '')}}"
+      title: "{{tvdb_series_name|escape|replace(':', '')}}"
+    list_add:
+      - entry_list: trakt-series
+
+  spaseries:
+    template:
+      - torrent_server
+    priority: 5
+    configure_series:
+      from:
+        entry_list: trakt-series
+      <<: *settings_newpct
+    rss:
+      url: http://feeds2.feedburner.com/newpctorrent/
+
+  test_thetvdb_lang:
+    mock:
+      - {title: 'Las Chicas Del Cable (Cap 101)'}
+    series:
+      - 'Las Chicas Del Cable'
+    thetvdb_lookup:
+      language: es
+    mock_output: yes
+
+# tests with favorites lists. can't translate to spanish
+  test_tvtask:
+    rss:
+      url: http://feeds2.feedburner.com/newpctorrent/
+    sequence:
+      - configure_series:
+          from:
+            <<: *trakt_list_2
+      - configure_series:
+          from:
+            <<: *trakt_list_1
+    thetvdb_lookup:
+      language: es
+    disable:
+      - seen
+      - seen_info_hash
+
   mis_series:
     rss:
       url: http://feeds2.feedburner.com/newpctorrent/
     template:
       - torrent_server
+
       - sigo-series
+
     series:
       settings:
         actuales-HD:

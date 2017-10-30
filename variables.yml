@@ -1,3 +1,8 @@
 imdb:
-  user_id: ur11223344
-
+  user_id: ur12345678
+trakt:
+  user1: Puthere
+  user2: your-users
+thetvdb:
+  username2: another-user
+  accountid2: ACBDEF123456789
