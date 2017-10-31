@@ -29,14 +29,14 @@ templates:
   anchors:
     _trakt_list_1: &trakt_list_1
       trakt_list:
-        username: '{? trakt.user1 ?}'
+        username: '{? trakt.user1.name ?}'
         #account:
-        list: watchlist
+        list: '{? trakt.user1.list_rss ?}'
         type: shows
     _trakt_list_2: &trakt_list_2
       trakt_list:
-        username: '{? trakt.user2 ?}'
-        list: watchlist
+        username: '{? trakt.user2.name ?}'
+        list: '{? trakt.user2.list_rss ?}'
         type: shows
     _thetvdb_list_2: &thetvdb_list_2
       thetvdb_list:
@@ -81,7 +81,7 @@ tasks:
     set:
 #      title: "{{ tvdb_series_name }}"
 #      title: "{{tvdb_series_name|escape|replace('&#39;', '')}}"
-      title: "{{tvdb_series_name|escape|replace(':', '')}}"
+      title: "{{tvdb_series_name|replace(':', '')|replace('ó','o')|escape|replace('&#39;', '')}}"
     list_add:
       - entry_list: trakt-series
 

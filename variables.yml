@@ -1,8 +1,12 @@
 imdb:
   user_id: ur12345678
 trakt:
-  user1: Puthere
-  user2: your-users
+  user1:
+    name: username1
+    list_rss: not_watchlist
+  user2:
+    name: user-name2
+    list_rss: serie-list
 thetvdb:
-  username2: another-user
-  accountid2: ACBDEF123456789
+  username2: userthetv
+  accountid2: ABCDE1234567890
