@@ -81,7 +81,7 @@ tasks:
     set:
 #      title: "{{ tvdb_series_name }}"
 #      title: "{{tvdb_series_name|escape|replace('&#39;', '')}}"
-      title: "{{tvdb_series_name|replace(':', '')|replace('ó','o')|escape|replace('&#39;', '')}}"
+      title: "{{tvdb_series_name|replace(':', '')|replace('ó','o')|replace('Marvel\\'s ', '')}}"
     list_add:
       - entry_list: trakt-series
 
