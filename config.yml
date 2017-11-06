@@ -17,14 +17,7 @@ templates:
   sigo-series:
     series:
       actuales-HD:
-        - Outlander
-        - Poldark
-        - Westworld
         - Borgoña
-        - Velvet Coleccion
-        - El Ministerio Del Tiempo
-        - Star Trek Discovery
-        - The Walking Dead
 
   anchors:
     _trakt_list_1: &trakt_list_1
@@ -79,8 +72,7 @@ tasks:
       - <<: *trakt_list_1
     accept_all: yes
     set:
-#      title: "{{ tvdb_series_name }}"
-#      title: "{{tvdb_series_name|escape|replace('&#39;', '')}}"
+#      title: "{{tvdb_series_name|replace(':', '')|replace('ó','o')|escape|replace('&#39;', '')}}"
       title: "{{tvdb_series_name|replace(':', '')|replace('ó','o')|replace('Marvel\\'s ', '')}}"
     list_add:
       - entry_list: trakt-series
@@ -95,15 +87,7 @@ tasks:
       <<: *settings_newpct
     rss:
       url: http://feeds2.feedburner.com/newpctorrent/
-
-  test_thetvdb_lang:
-    mock:
-      - {title: 'Las Chicas Del Cable (Cap 101)'}
-    series:
-      - 'Las Chicas Del Cable'
-    thetvdb_lookup:
-      language: es
-    mock_output: yes
+#      url: http://www.newpct1.com/feed/
 
 # tests with favorites lists. can't translate to spanish
   test_tvtask:
@@ -127,9 +111,7 @@ tasks:
       url: http://feeds2.feedburner.com/newpctorrent/
     template:
       - torrent_server
-
       - sigo-series
-
     series:
       settings:
         actuales-HD:
@@ -222,12 +204,12 @@ tasks:
     # NOTE: You must set the parse_only option for all of the series groups you have configured in your template.
     # This option prevents the series plugin from accepting or rejecting anything in this feed.
     # it will merely fill in parsed metadata for the matching series on each entry 
-    template: sigo-series
-    series:
+    configure_series:
+      from:
+        entry_list: trakt-series
       settings:
-        actuales-HD:
-          parse_only: yes
-          identified_by: ep
+        parse_only: yes
+        identified_by: ep
     # Ignore samples
     regexp:
       reject: 
