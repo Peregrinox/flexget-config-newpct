@@ -1,5 +1,6 @@
 imdb:
-  user_id: ur12345678
+  user1_id: ur12345678
+  user2_id: ur98765432
 trakt:
   user1:
     name: username1

@@ -136,12 +136,14 @@ tasks:
     priority: 1
     interval: 2 hours
     inputs:
-      - trakt_list:
-          <<: *trakt_list_1_props
-          type: movies
-      - trakt_list:
-          <<: *trakt_list_2_props
-          type: movies
+      - imdb_watchlist:
+          user_id: '{? imdb.user1_id ?}'
+          list: watchlist
+          force_language: es-es
+#      - imdb_watchlist:
+#          user_id: '{? imdb.user2_id ?}'
+#          list: watchlist
+#          force_language: es-es
     accept_all: yes
     seen: local
     list_add:
