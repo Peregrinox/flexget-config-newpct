@@ -21,13 +21,13 @@ templates:
 
   anchors:
     _trakt_list_1: &trakt_list_1
-      trakt_list:
+      trakt_list: &trakt_list_1_props
         username: '{? trakt.user1.name ?}'
         #account:
         list: '{? trakt.user1.list_rss ?}'
         type: shows
     _trakt_list_2: &trakt_list_2
-      trakt_list:
+      trakt_list: &trakt_list_2_props
         username: '{? trakt.user2.name ?}'
         list: '{? trakt.user2.list_rss ?}'
         type: shows
@@ -131,13 +131,17 @@ tasks:
       from:
         - newpct: yes
 
-  watchlist:
+  # old wathlist task
+  fill-movie-list:
     priority: 1
     interval: 2 hours
-    imdb_watchlist:
-      user_id: '{? imdb.user_id ?}'
-      list: watchlist
-      force_language: es-es
+    inputs:
+      - trakt_list:
+          <<: *trakt_list_1_props
+          type: movies
+      - trakt_list:
+          <<: *trakt_list_2_props
+          type: movies
     accept_all: yes
     seen: local
     list_add:
