@@ -135,6 +135,8 @@ tasks:
   fill-movie-list:
     priority: 1
     interval: 2 hours
+    template:
+      - disable-seen-retry
     inputs:
       - imdb_watchlist:
           user_id: '{? imdb.user1_id ?}'
@@ -144,16 +146,37 @@ tasks:
 #          user_id: '{? imdb.user2_id ?}'
 #          list: watchlist
 #          force_language: es-es
+    tmdb_lookup:
+      language: es
     accept_all: yes
-    seen: local
+# should not be needed while using movie_list + imdb_lookup in filter task because match is by imdb_id, not title
+#    set:
+#      title: "{{title|replace(':', '')|replace('á','a')|replace('é','e')|replace('í','i')|replace('ó','o')|replace('ú','u')}}"
     list_add:
       - movie_list: wanted_movies
+
+  spapelis:
+    template:
+      - torrent_server
+    rss:
+      url: http://feeds2.feedburner.com/newpctorrent/
+    parsing:
+      movie: guessit
+    # seen_movies: loose
+    list_match:
+      from:
+        - movie_list: wanted_movies
+    quality: 1080p !bluray
+    tmdb_lookup:
+      language: es
 
   busca_pelis:
     priority: 10
     discover:
       what:
-        - movie_list: wanted_movies
+        - movie_list:
+            list_name: wanted_movies
+            strip_year: yes
       from:
         - newpct: yes
     imdb_lookup: yes
