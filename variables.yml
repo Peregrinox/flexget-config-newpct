@@ -1,6 +1,10 @@
 imdb:
-  user1_id: ur12345678
-  user2_id: ur98765432
+  user1:
+    id: ur98765432
+    listseriesid: ls021273471
+  user2:
+    id: ur12345678
+    listseriesid: watchlist
 trakt:
   user1:
     name: username1

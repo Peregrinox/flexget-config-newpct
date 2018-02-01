@@ -4,6 +4,7 @@ templates:
     transmission:
       host: localhost
       port: 9091
+      magnetization_timeout: 30
       path: /media/TOSHIBA EXT/flexget/series/
 
 ##### Disable builtins for some tasks
@@ -61,7 +62,7 @@ tasks:
 #    priority: 2
     template:
       - disable-seen-retry
-#    metainfo_series: yes
+#   metainfo_series: yes
     thetvdb_lookup:
       language: es
     list_clear:
@@ -70,6 +71,10 @@ tasks:
     inputs:
       - <<: *trakt_list_2
       - <<: *trakt_list_1
+#     - imdb_watchlist:
+#         user_id: '{? imdb.user1.id ?}'
+#         list: '{? imdb.user1.listseriesid ?}'
+#         force_language: es-es
     accept_all: yes
     set:
 #      title: "{{tvdb_series_name|replace(':', '')|replace('ó','o')|escape|replace('&#39;', '')}}"
@@ -139,11 +144,11 @@ tasks:
       - disable-seen-retry
     inputs:
       - imdb_watchlist:
-          user_id: '{? imdb.user1_id ?}'
+          user_id: '{? imdb.user1.id ?}'
           list: watchlist
           force_language: es-es
 #      - imdb_watchlist:
-#          user_id: '{? imdb.user2_id ?}'
+#          user_id: '{? imdb.user2.id ?}'
 #          list: watchlist
 #          force_language: es-es
     tmdb_lookup:
