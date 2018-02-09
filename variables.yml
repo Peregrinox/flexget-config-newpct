@@ -15,3 +15,9 @@ trakt:
 thetvdb:
   username2: userthetv
   accountid2: ABCDE1234567890
+path:
+  download:
+    shows: /media/TOSHIBA EXT/flexget/series/
+    movies: /media/TOSHIBA EXT/flexget/peliculas/
+  kodi:
+    shows: /media/TOSHIBA EXT/Series/

@@ -5,7 +5,7 @@ templates:
       host: localhost
       port: 9091
       magnetization_timeout: 30
-      path: /media/TOSHIBA EXT/flexget/series/
+      path: '{? path.download.shows ?}'
 
 ##### Disable builtins for some tasks
 #
@@ -42,7 +42,7 @@ templates:
           - Cap.(\d+)(\d\d)
         quality: 1080p 720p
         identified_by: ep
-        path: /media/TOSHIBA EXT/flexget/series/
+        path: '{? path.download.shows ?}'
 
   tv_old:
     series:
@@ -124,7 +124,7 @@ tasks:
             - Cap.(\d+)(\d\d)
           quality: 1080p 720p
           identified_by: ep
-          path: /media/TOSHIBA EXT/flexget/series/
+          path: '{? path.download.shows ?}'
     thetvdb_lookup: yes
 
   search_series:
@@ -191,7 +191,7 @@ tasks:
     quality:
       - 1080p
     set:
-      path: /media/TOSHIBA EXT/flexget/pelis
+      path: '{? path.download.movies ?}'
     list_match:
       from:
         - movie_list: wanted_movies
@@ -221,7 +221,7 @@ tasks:
   sort-series:
     priority: 20
     filesystem:
-      path: /media/TOSHIBA EXT/flexget/series/
+      path: '{? path.download.shows ?}'
       regexp: '.*\.(avi|mkv|mp4)$'
       recursive: 2
       retrieve: files
@@ -252,5 +252,5 @@ tasks:
     require_field: series_name
     accept_all: yes
     move:
-      to: /media/TOSHIBA EXT/Series/{{series_name}}
+      to: '{? path.kodi.shows ?}{{series_name}}'
       rename: '{{ series_name }} {{ series_id }}'
