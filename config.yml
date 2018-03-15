@@ -91,8 +91,9 @@ tasks:
         entry_list: trakt-series
       <<: *settings_newpct
     rss:
-      url: http://feeds2.feedburner.com/newpctorrent/
-#      url: http://www.newpct1.com/feed/
+      url: http://feeds2.feedburner.com/descargas2020/
+#      url: http://feeds2.feedburner.com/newpctorrent/
+#      url: http://www.descargas2020.com/feed/
 
 # tests with favorites lists. can't translate to spanish
   test_tvtask:
@@ -134,7 +135,7 @@ tasks:
         - next_series_episodes:
             from_start: yes
       from:
-        - newpct: yes
+        - descargas2020: yes
 
   # old wathlist task
   fill-movie-list:
@@ -164,7 +165,7 @@ tasks:
     template:
       - torrent_server
     rss:
-      url: http://feeds2.feedburner.com/newpctorrent/
+      url: http://feeds2.feedburner.com/descargas2020/
     parsing:
       movie: guessit
     # seen_movies: loose
@@ -183,7 +184,7 @@ tasks:
             list_name: wanted_movies
             strip_year: yes
       from:
-        - newpct: yes
+        - descargas2020: yes
     imdb_lookup: yes
 #   tmdb_lookup: yes
 #   trakt_lookup: yes
@@ -216,7 +217,7 @@ tasks:
 #     finished_for: 2 hours
 #     min_ratio: 0.1
       directories:
-        - \A/+media/+TOSHIBA EXT/+flexget/+series(\Z|/+.*)
+        - \A/+media/+Elements/+flexget/+series(\Z|/+.*)
 
   sort-series:
     priority: 20
